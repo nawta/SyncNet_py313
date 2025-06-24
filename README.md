@@ -2,7 +2,6 @@
 
 [![PyPI version](https://badge.fury.io/py/syncnet-python.svg)](https://badge.fury.io/py/syncnet-python)
 [![Python](https://img.shields.io/pypi/pyversions/syncnet-python.svg)](https://pypi.org/project/syncnet-python/)
-[![Downloads](https://pepy.tech/badge/syncnet-python)](https://pepy.tech/project/syncnet-python)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Audio-visual synchronization detection using deep learning with modern Python architecture.
