@@ -1,0 +1,11 @@
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+scenedetect[opencv]>=0.6.0
+opencv-contrib-python>=4.8.0
+python-speech-features>=0.6
+ffmpeg-python>=0.2.0
+pyyaml>=6.0
+psutil>=5.9.0

@@ -1,0 +1,44 @@
+# Default SyncNet configuration
+
+# Model configuration
+model:
+  embedding_dim: 1024
+  audio_channels: 12
+  visual_channels: 5
+  device: cuda
+  weights_path: weights/syncnet_v2.model
+
+# Face detector configuration
+face_detector:
+  model_path: weights/sfd_face.pth
+  device: cuda
+  confidence_threshold: 0.8
+  nms_threshold: 0.4
+  max_faces: 10
+
+# Audio processing configuration
+audio:
+  sample_rate: 16000
+  n_mfcc: 12
+  window_size: 0.025  # 25ms
+  hop_size: 0.010     # 10ms
+  n_fft: 512
+
+# Video processing configuration
+video:
+  fps: 25.0
+  frame_size: [224, 224]
+  crop_scale: 0.4
+  batch_size: 32
+
+# Synchronization analysis configuration
+sync:
+  vshift: 15          # Maximum video shift in frames
+  batch_size: 20      # Batch size for sync computation
+  min_track_length: 50
+
+# Pipeline configuration
+save_intermediate: false
+output_dir: output
+log_level: INFO
+num_workers: 4

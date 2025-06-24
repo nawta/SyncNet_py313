@@ -1,0 +1,102 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "syncnet-python"
+version = "0.2.0"
+description = "SyncNet: Audio-visual synchronization detection using deep learning. Updated version of https://github.com/joonson/syncnet_python for modern Python versions."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "SyncNet Python Contributors"},
+]
+maintainers = [
+    {name = "SyncNet Python Contributors"},
+]
+keywords = ["audio-visual", "synchronization", "deep-learning", "pytorch", "lip-sync", "video-processing", "computer-vision"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+dependencies = [
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "pandas>=2.0.0",
+    "scenedetect[opencv]>=0.6.0",
+    "opencv-contrib-python>=4.8.0",
+    "python-speech-features>=0.6",
+    "ffmpeg-python>=0.2.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/nawta/SyncNet_py313"
+"Bug Reports" = "https://github.com/nawta/SyncNet_py313/issues"
+"Source" = "https://github.com/nawta/SyncNet_py313"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+    "types-opencv-python",
+    "types-scipy",
+]
+
+[project.scripts]
+syncnet-python = "syncnet_python.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["syncnet_python*"]
+exclude = ["tests*", "docs*", "examples*"]
+
+[tool.setuptools.package-data]
+syncnet_python = ["*.py", "detectors/*.py", "detectors/s3fd/*.py"]
+
+[tool.black]
+line-length = 88
+target-version = ['py313']
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true

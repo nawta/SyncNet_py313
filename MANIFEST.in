@@ -1,0 +1,33 @@
+include README.md
+include LICENSE
+include INSTALL.md
+include CLAUDE.md
+include requirements.txt
+
+# Include example files
+include example/*.wav
+include example/*.avi
+
+# Include scripts
+recursive-include scripts *.py
+
+# Include package data
+recursive-include syncnet *.py
+recursive-include script *.py
+
+# Exclude unnecessary files
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store
+global-exclude *.swp
+global-exclude *.swo
+
+# Exclude weights (too large for PyPI)
+exclude weights/*.pth
+exclude weights/*.model
+
+# Exclude test and cache directories
+prune temp_test
+prune example/cache
+prune .git
+prune .claude
