@@ -18,10 +18,17 @@ from scipy.interpolate import interp1d
 from scenedetect import ContentDetector, SceneManager, StatsManager
 from scenedetect.video_manager import VideoManager
 
-from .detectors.s3fd import S3FD
-from .detectors.s3fd.nets import S3FDNet
-from .SyncNetInstance import SyncNetInstance
-from .SyncNetModel import S
+try:
+    from .detectors.s3fd import S3FD
+    from .detectors.s3fd.nets import S3FDNet
+    from .SyncNetInstance import SyncNetInstance
+    from .SyncNetModel import S
+except ImportError:
+    # Fallback for direct script execution
+    from detectors.s3fd import S3FD
+    from detectors.s3fd.nets import S3FDNet
+    from SyncNetInstance import SyncNetInstance
+    from SyncNetModel import S
 
 # ---------------------------------------------------------------------- #
 # Configuration                                                          #
@@ -47,6 +54,11 @@ class PipelineConfig:
     # Tools
     ffmpeg_bin: str = "ffmpeg"  # assumes ffmpeg in $PATH
     audio_sample_rate: int = 16000  # resample rate for speech
+    
+    def __post_init__(self):
+        """Validate configuration after initialization."""
+        if self.ffmpeg_bin is None:
+            self.ffmpeg_bin = "ffmpeg"
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]):
@@ -165,16 +177,41 @@ class SyncNetPipeline:
         slice_wav = f"{base}.wav"
         ss = track["frame"][0] / cfg.frame_rate
         to = (track["frame"][-1] + 1) / cfg.frame_rate
-        subprocess.call(
-            f'{cfg.ffmpeg_bin} -y -i "{audio_wav}" -ss {ss:.3f} -to {to:.3f} "{slice_wav}"',
-            shell=True,
-        )
+        
+        # Ensure ffmpeg_bin is not None
+        ffmpeg_bin = cfg.ffmpeg_bin if cfg.ffmpeg_bin is not None else "ffmpeg"
+        
+        cmd = [
+            ffmpeg_bin, "-y", "-i", str(audio_wav), 
+            "-ss", f"{ss:.3f}", "-to", f"{to:.3f}", 
+            str(slice_wav)
+        ]
+        
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        except subprocess.CalledProcessError as e:
+            logging.error(f"FFmpeg audio slicing failed: {e.stderr}")
+            raise RuntimeError(f"FFmpeg audio slicing failed: {e.stderr}")
+        except FileNotFoundError:
+            logging.error(f"FFmpeg not found at: {ffmpeg_bin}")
+            raise RuntimeError(f"FFmpeg not found. Please ensure ffmpeg is installed and in PATH.")
 
         final_avi = f"{base}.avi"
-        subprocess.call(
-            f'{cfg.ffmpeg_bin} -y -i "{tmp_avi}" -i "{slice_wav}" -c:v copy -c:a copy "{final_avi}"',
-            shell=True,
-        )
+        
+        cmd = [
+            ffmpeg_bin, "-y", "-i", str(tmp_avi), "-i", str(slice_wav),
+            "-c:v", "copy", "-c:a", "copy", str(final_avi)
+        ]
+        
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        except subprocess.CalledProcessError as e:
+            logging.error(f"FFmpeg video/audio merge failed: {e.stderr}")
+            raise RuntimeError(f"FFmpeg video/audio merge failed: {e.stderr}")
+        except FileNotFoundError:
+            logging.error(f"FFmpeg not found at: {ffmpeg_bin}")
+            raise RuntimeError(f"FFmpeg not found. Please ensure ffmpeg is installed and in PATH.")
+        
         os.remove(tmp_avi)
         return final_avi
 

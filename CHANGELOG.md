@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2025-01-24
+## [0.2.1] - 2025-01-06
+
+### Fixed
+- FFmpeg NoneType error in `syncnet_pipeline.py` when ffmpeg_bin is None
+- Improved error handling for FFmpeg subprocess calls
+- Fixed import paths for direct script execution (relative imports with fallback)
+
+### Changed
+- Replaced `subprocess.call` with `subprocess.run` for better error handling
+- Added explicit FFmpeg binary path validation
+- Improved error messages for FFmpeg-related failures
+
+## [0.2.0] - 2025-01-24
 
 ### Added
 - Abstract base classes for all major components (BaseModel, AudioProcessor, VideoProcessor, etc.)

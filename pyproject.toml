@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "syncnet-python"
-version = "0.2.0"
+version = "0.2.1"
 description = "SyncNet: Audio-visual synchronization detection using deep learning. Updated version of https://github.com/joonson/syncnet_python for modern Python versions."
 readme = "README.md"
 requires-python = ">=3.9"
